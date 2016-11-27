@@ -17,16 +17,18 @@
     "files": [
       "**/*",
       "!build/*",
+      "!test/*",
       "!.gitignore",
       "!gulpfile.js"
     ],
     "extraResources": []
   },
   "scripts": {
-    "app": "electron .",
+    "app": "./node_modules/.bin/electron .",
     "compile": "gulp compile",
     "watch": "gulp watch",
-    "package": "gulp package"
+    "package": "gulp package",
+    "test": "gulp test"
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
@@ -39,10 +41,15 @@
     "babel-preset-react": "^6.16.0",
     "electron": "^1.4.5",
     "electron-builder": "^8.6.0",
+    "electron-prebuilt": "^1.4.8",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
+    "gulp-espower": "^1.1.0",
+    "gulp-run-sequence": "^0.3.2",
     "gulp-sass": "^2.3.2",
     "gulp-shell": "^0.5.2",
-    "gulp-sourcemaps": "^1.9.1"
+    "gulp-sourcemaps": "^1.9.1",
+    "power-assert": "^1.4.2",
+    "spectron": "^3.4.0"
   }
 }
