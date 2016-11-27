@@ -1,12 +1,38 @@
-const React = require('react');
-const ReactDOM = require('react-dom');
-const Remote = require('electron').remote;
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {remote as Remote} from 'electron';
 
-class Application extends React.Component {
+
+class CountLabel extends React.Component {
+  constructor() {
+    super();
+    this.state = {count: 0};
+  }
+  increment() {
+    this.setState((prevState, props)=>{
+      return {count: prevState.count+1};
+    });
+  }
   render() {
-    return <button type="button" className="btn btn-primary">{this.props.label}</button>
+    return (<span className="label label-info">{this.state.count}</span>);
   }
 }
+
+
+class Application extends React.Component {
+  onClick() {
+    this.refs.countLabel.increment();
+  }
+  render() {
+    return (
+      <div>
+        <button type="button" className="btn btn-primary" onClick={()=>{this.onClick()}}>{this.props.label}</button>
+        <CountLabel ref="countLabel" />
+      </div>
+    );
+  }
+}
+
 
 ReactDOM.render(
   <Application label={Remote.getGlobal("sharedObject").commandArguments[0] || "world"}/>,
