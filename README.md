@@ -5,7 +5,7 @@ Example for Electron with react.js, scss, bootstrap and gulp task.
 
 ```
 $ npm install
-$ npm run build
+$ npm run compile
 $ npm run app
 ```
 
@@ -13,30 +13,12 @@ $ npm run app
 
 ## gulp tasks
 
-### gulp babel (npm run babel)
-
-Compile JSX(src/\*.jsx) to js/\*.js .
-
-```
-$ npm run babel
-```
-
-
-### gulp scss (npm run scss)
-
-Compile SCSS(src/\*.scss) to css/\*.css .
-
-```
-$ npm run scss
-```
-
-
-### gulp build (npm run build)
+### gulp compile (npm run compile)
 
 Compile JSX and SCSS.
 
 ```
-$ npm run build
+$ npm run compile
 ```
 
 
@@ -55,4 +37,13 @@ Launch electron.
 
 ```
 $ npm run app
+```
+
+
+### gulp package (npm run package)
+
+Build install package (OSX-dmg or Windows-NSIS-Installer)
+
+```
+$ npm run package
 ```
