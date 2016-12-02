@@ -1,11 +1,12 @@
+require('babel-core/register');
 const gulp = require('gulp');
 const babel = require('gulp-babel');
 const sass  = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const config = require(__dirname + '/package.json');
 const shell = require('gulp-shell');
-const espower = require('gulp-espower');
-const runSequence = require('gulp-run-sequence');
+const runSequence = require('run-sequence');
+
 
 gulp.task('babel', ()=>{
   var bbl = babel(config.babel);
@@ -43,25 +44,16 @@ gulp.task('package-win32', shell.task([
 gulp.task('package', ['package-' + process.platform]);
 
 
-gulp.task('babel-test', ()=>{
-  var bbl = babel(config.babel);
+gulp.task('run-test', ()=>{
+  const mocha = require('gulp-mocha');
   return gulp.src('test/*.es6')
-    .pipe(sourcemaps.init())
-    .pipe(bbl.on('error', (e)=>{
-      console.log(e.message);
-      console.log(e.codeFrame);
-      bbl.emit('end');
-    }))
-    .pipe(espower())
-    .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest('test_js'));
+    .pipe(mocha({compilers:['es6:babel-core/register']}));
 });
-gulp.task('test-exec', shell.task([
-  "node test_js/app_test.js"
-]));
+
+
 gulp.task('test', ()=>{
-  return runSequence(
-    'babel-test',
-    'test-exec'
-  );
+  return runSequence([
+    'compile',
+    'run-test'
+  ]);
 });

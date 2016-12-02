@@ -1,36 +1,53 @@
-const Application = require("spectron").Application;
-const assert = require('power-assert');
-const path = require("path");
+import Chai from'chai';
+Chai.use(require('chai-as-promised'));
+const expect = Chai.expect;
 
-const isWindows = process.platform === "win32";
-const ext = isWindows ? ".cmd" : "";
-const electronPath = path.join(__dirname, "..", "node_modules", ".bin", "electron" + ext);
-const appPath = path.join(__dirname, "..");
+import path from 'path';
+const ext = (process.platform === 'win32')? '.cmd' : '';
+const electronPath = path.join(__dirname, '..', 'node_modules', '.bin', 'electron' + ext);
+const appPath = path.join(__dirname, '..');
 
+import {Application} from 'spectron';
 const app = new Application({
   path: electronPath,
   args: [appPath, 'HELLO']
 });
 
-app.start().then(()=>{
-  return app.browserWindow.isVisible();
-}).then((isVisible)=>{
-  assert(isVisible === true);
-})
-.then(()=>{
-  return app.client.getTitle();
-}).then((title)=>{
-  assert(title == "Example");
-})
-.then(()=>{
-  return app.client.getText("button");
-}).then((text)=>{
-  assert(text === "HELLO");
-})
-.then(()=>{
-  console.info("Test Success");
-  return app.stop();
-}).catch((error)=>{
-  console.error("Test failed", error.message);
-  return app.stop();
+
+describe('Application', ()=>{
+  before((done)=>{
+    app.start().then(()=>{
+      app.client.waitUntilWindowLoaded().then(()=>{
+        done();
+      });
+    });
+  });
+
+  it('browserWindow is visible', ()=>{
+    return expect(app.browserWindow.isVisible()).eventually.to.equal(true);
+  });
+
+  // see http://webdriver.io/api.html
+  it('application title is `Example`', ()=>{
+    return expect(app.client.getTitle()).eventually.to.equal('Example');
+  });
+
+  it('button text is `HELLO`', ()=>{
+    return expect(app.client.getText('button')).eventually.to.equal('HELLO');
+  });
+
+  it('label text is initially `0`', ()=>{
+    return expect(app.client.getText('span.label')).eventually.to.equal('0');
+  });
+
+  it('When the button is clicked, the label text becomes `1`', ()=>{
+    app.client.click('button');
+    return expect(app.client.getText('span.label')).eventually.to.equal('1');
+  });
+
+  after((done)=>{
+    app.stop().then(()=>{
+      done();
+    });
+  });
 });
