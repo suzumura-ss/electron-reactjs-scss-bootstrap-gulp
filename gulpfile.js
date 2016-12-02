@@ -47,7 +47,7 @@ gulp.task('package', ['package-' + process.platform]);
 gulp.task('run-test', ()=>{
   const mocha = require('gulp-mocha');
   return gulp.src('test/*.es6')
-    .pipe(mocha({compilers:['es6:babel-core/register']}));
+    .pipe(mocha({compilers:['es6:babel-core/register'], timeout: 5000}));
 });
 
 
