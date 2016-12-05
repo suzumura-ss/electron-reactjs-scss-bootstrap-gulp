@@ -41,8 +41,9 @@ describe('Application', ()=>{
   });
 
   it('When the button is clicked, the label text becomes `1`', ()=>{
-    app.client.click('button');
-    return expect(app.client.getText('span.label')).eventually.to.equal('1');
+    return app.client.click('button').then(()=>{
+      return expect(app.client.getText('span.label')).eventually.to.equal('1');
+    });
   });
 
   after((done)=>{
