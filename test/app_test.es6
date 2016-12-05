@@ -15,11 +15,9 @@ const app = new Application({
 
 
 describe('Application', ()=>{
-  before((done)=>{
-    app.start().then(()=>{
-      app.client.waitUntilWindowLoaded().then(()=>{
-        done();
-      });
+  before(()=>{
+    return app.start().then(()=>{
+      return app.client.waitUntilWindowLoaded();
     });
   });
 
@@ -46,9 +44,7 @@ describe('Application', ()=>{
     });
   });
 
-  after((done)=>{
-    app.stop().then(()=>{
-      done();
-    });
+  after(()=>{
+    return app.stop();
   });
 });
