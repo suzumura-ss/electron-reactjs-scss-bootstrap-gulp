@@ -35,6 +35,8 @@
     "bootstrap": "^3.3.7",
     "bootstrap.native": "^2.0.5",
     "commander": "^2.9.0",
+    "flux": "^3.1.2",
+    "immutable": "^3.8.1",
     "react": "^15.3.2",
     "react-dom": "^15.3.2"
   },

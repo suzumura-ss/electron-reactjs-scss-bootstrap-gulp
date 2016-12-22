@@ -1,41 +1,80 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+//-----------------------------------------------------------------------------
+// Action
+const ClickActionTypes = {
+  Increment: 'INCREMENT'
+}
+const ClickActions = {
+  increment() {
+    ClickDispatcher.dispatch({type: ClickActionTypes.Increment})
+  }
+}
+
+
+//-----------------------------------------------------------------------------
+// Dispatcher
+import {Dispatcher} from 'flux';
+const ClickDispatcher = new Dispatcher();
+
+
+//-----------------------------------------------------------------------------
+// Store
+import Immutable from 'immutable';
+import {ReduceStore} from 'flux/utils';
+
+class ClickStoreBase extends ReduceStore {
+  constructor() {
+    super(ClickDispatcher);
+  }
+
+  getInitialState() {
+    return Immutable.Map({count: 0});
+  }
+
+  reduce(state, action) {
+    switch (action.type) {
+    case ClickActionTypes.Increment:
+      return state.update("count", (c)=>{
+        return c+1;
+      });
+    default:
+      return state;
+    }
+  }
+}
+const ClickStore = new ClickStoreBase();
+
+
+//-----------------------------------------------------------------------------
+// View(Container)
+import {Container} from 'flux/utils';
 import {remote as Remote} from 'electron';
 
-
-class CountLabel extends React.Component {
-  constructor() {
-    super();
-    this.state = {count: 0};
-  }
-  increment() {
-    this.setState((prevState, props)=>{
-      return {count: prevState.count+1};
-    });
-  }
-  render() {
-    return (<span className="label label-info">{this.state.count}</span>);
-  }
+function getStores() {
+  return [ ClickStore ];
 }
 
-
-class Application extends React.Component {
-  onClick() {
-    this.refs.countLabel.increment();
-  }
-  render() {
-    return (
-      <div>
-        <button type="button" className="btn btn-primary" onClick={()=>{this.onClick()}}>{this.props.label}</button>
-        <CountLabel ref="countLabel" />
-      </div>
-    );
-  }
+function getState() {
+  return {
+    click: ClickStore.getState(),
+    onIncrement: ClickActions.increment,
+  };
 }
 
+const ButtonLabel = Remote.getGlobal("sharedObject").commandArguments.label;
+function AppView(props) {
+  return (
+    <div>
+      <button type="button" className="btn btn-primary" onClick={()=>props.onIncrement()}>{ButtonLabel}</button>
+      <span className="label label-info">{props.click.get("count")}</span>
+    </div>
+  );
+}
+const AppContainer = Container.createFunctional(AppView, getStores, getState);
 
-const CommandArguments = Remote.getGlobal("sharedObject").commandArguments;
-ReactDOM.render(
-  <Application label={CommandArguments.label} />,
-  document.getElementById('application')
-);
+
+//-----------------------------------------------------------------------------
+// Entry
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+ReactDOM.render(<AppContainer />, document.getElementById('application'));
