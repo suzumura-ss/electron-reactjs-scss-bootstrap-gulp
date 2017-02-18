@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
-    "bootstrap.native": "^1.1.0",
+    "bootstrap.native": "^2.0.5",
     "commander": "^2.9.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2"
@@ -45,14 +45,14 @@
     "babel-register": "^6.18.0",
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
-    "electron": "^1.4.5",
-    "electron-builder": "^8.6.0",
+    "electron": "^1.6.0",
+    "electron-builder": "^13.10.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-mocha": "^3.0.1",
-    "gulp-sass": "^2.3.2",
+    "gulp-sass": "^3.1.0",
     "gulp-shell": "^0.5.2",
-    "gulp-sourcemaps": "^1.9.1",
+    "gulp-sourcemaps": "^2.4.1",
     "run-sequence": "^1.2.2",
     "spectron": "^3.4.0"
   }
