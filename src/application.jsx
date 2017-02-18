@@ -34,7 +34,8 @@ class Application extends React.Component {
 }
 
 
+const CommandArguments = Remote.getGlobal("sharedObject").commandArguments;
 ReactDOM.render(
-  <Application label={Remote.getGlobal("sharedObject").commandArguments[0] || "world"}/>,
+  <Application label={CommandArguments.label} />,
   document.getElementById('application')
 );

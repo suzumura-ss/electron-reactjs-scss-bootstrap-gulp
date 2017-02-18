@@ -10,7 +10,7 @@ const appPath = path.join(__dirname, '..');
 import {Application} from 'spectron';
 const app = new Application({
   path: electronPath,
-  args: [appPath, 'HELLO']
+  args: [appPath, '--label=HELLO']
 });
 
 

@@ -6,11 +6,27 @@ const {app} = electron;
 // Module to create native browser window.
 const {BrowserWindow} = electron;
 
+// command arguments.
+const {version} = require(__dirname + '/package.json');
+const Command = require('commander');
+Command.version(version)
+  .option('-l, --label [LABEL]', 'Button label', 'world');
+try {
+  Command.parse(process.argv);
+} catch (e) {
+  /* Discard the exception that occurs when process.argv is only $0.
+  TypeError: Path must be a string. Received undefined
+      at assertPath (path.js:7:11)
+      at basename (path.js:1357:5)
+      at Command.parse
+   */
+}
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
 
-global.sharedObject = {commandArguments: process.argv.slice(2)}
+global.sharedObject = {commandArguments: Command}
 
 function createWindow() {
   // Create the browser window.
