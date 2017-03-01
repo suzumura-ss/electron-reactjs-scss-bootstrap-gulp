@@ -33,9 +33,11 @@
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "bootstrap-slider": "^9.7.2",
     "bootstrap.native": "^2.0.5",
     "commander": "^2.9.0",
     "react": "^15.3.2",
+    "react-bootstrap-slider": "^1.1.4",
     "react-dom": "^15.3.2"
   },
   "devDependencies": {
