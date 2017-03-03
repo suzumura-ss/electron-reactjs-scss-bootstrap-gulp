@@ -13,6 +13,10 @@ const app = new Application({
   args: [appPath, '--label=HELLO']
 });
 
+function Sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 
 describe('Application', ()=>{
   before(()=>{
@@ -41,6 +45,14 @@ describe('Application', ()=>{
   it('When the button is clicked, the label text becomes `1`', ()=>{
     return app.client.click('button').then(()=>{
       return expect(app.client.getText('span.label')).eventually.to.equal('1');
+    });
+  });
+
+  it('When the slider is clicked, the label text becomes `30`', ()=>{
+    return app.client.getElementSize(".slider-track").then((_)=>{
+      return app.client.leftClick(".slider-track", _.width*0.3, 0);
+    }).then(()=>{
+      return expect(app.client.getText('span.label')).eventually.to.equal('30');
     });
   });
 
