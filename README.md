@@ -36,7 +36,7 @@ $ npm run watch
 Launch electron.
 
 ```
-$ npm run app
+$ npm start
 ```
 
 
