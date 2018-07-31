@@ -5,7 +5,6 @@ const sass  = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const config = require(__dirname + '/package.json');
 const shell = require('gulp-shell');
-const runSequence = require('run-sequence');
 
 
 gulp.task('babel', ()=>{
@@ -25,12 +24,12 @@ gulp.task('scss', ()=>{
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest('css'));
 });
-gulp.task('compile', ['babel', 'scss']);
+gulp.task('compile', gulp.parallel('babel', 'scss'));
 
 
 gulp.task('watch', ()=>{
-  gulp.watch('src/*.jsx', ['babel']);
-  gulp.watch('src/*.scss', ['scss']);
+  gulp.watch('src/*.jsx', gulp.task('babel'));
+  gulp.watch('src/*.scss', gulp.task('scss'));
 });
 
 //export CSC_LINK=file://path/to/codesign.p12
@@ -41,7 +40,7 @@ gulp.task('package-darwin', shell.task([
 gulp.task('package-win32', shell.task([
   "build --win nsis --ia32"
 ]));
-gulp.task('package', ['package-' + process.platform]);
+gulp.task('package', gulp.series('package-' + process.platform));
 
 
 gulp.task('run-test', ()=>{
@@ -51,9 +50,4 @@ gulp.task('run-test', ()=>{
 });
 
 
-gulp.task('test', ()=>{
-  return runSequence([
-    'compile',
-    'run-test'
-  ]);
-});
+gulp.task('test', gulp.series('compile', 'run-test'));
